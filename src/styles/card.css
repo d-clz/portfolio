@@ -7,12 +7,13 @@
 }
 
 .image img{
-    width: 250px;
-    height: 250px;
+    width: 17vw;
+    height: 17vw;
     border-radius: 100%;
     text-align: center;
     object-fit: cover;
     object-position: center;
+    margin: 0.5vw;
 }
 
 /* CONTAINER */
@@ -29,9 +30,9 @@
 /* CARD */
 .card-container{
     display: flex;
-    width: 800px;
+    width: 60%;
     height: auto;
-    background: linear-gradient(to right, #282C34, #53565d); /* #2FEBD4, #DEFFFD*/
+    background: linear-gradient(to right, #282C34, #414348); /* #2FEBD4, #DEFFFD*/
     border-radius: 12px;
     box-shadow: 1px 7px 10px 2px rgba(0, 0, 0, .15);
 }
