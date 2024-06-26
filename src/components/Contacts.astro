@@ -1,0 +1,36 @@
+---
+const {name, title, email, phoneNo, location} = Astro.props;
+---
+
+<div id="contacts" class="profile">
+    <div style="
+        font-weight: bold;
+        font-size: 30px;
+        padding-bottom: 5px;
+        color: #61AFEF;
+    ">{name}</div>
+    <div style="
+        font-weight: lighter;
+        font-size: 15px;
+        padding-top: 5px;
+        text-transform: uppercase;
+        color: #E5C07B;
+    ">{title}</div>
+    <br/>
+    <hr>
+    <br/>
+    <div class="contact-bottom">
+        <div class="contact-info">
+            <i class="bi bi-envelope-at"></i>
+            <span style="margin-left: 10px;font-weight: lighter">{email}</span>
+        </div>
+        <div class="contact-info">
+            <i class="bi bi-telephone-inbound"></i>
+            <span style="margin-left: 10px;font-weight: lighter">{phoneNo}</span>
+        </div>
+        <div class="contact-info">
+            <i class="bi bi-geo-alt"></i>
+            <span style="margin-left: 10px;font-weight: lighter">{location}</span>
+        </div>
+    </div>
+</div>

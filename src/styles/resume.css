@@ -1,0 +1,47 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-color: #131516;
+    font-family: 'Roboto Mono', monospace;
+    padding: 0 25px;
+    flex-direction: column;
+}
+
+.hr{
+    width: 100%;
+}
+
+.resume{
+    background-color: #ABB2BF;
+    width: 85%;
+    padding: 50px 50px;
+}
+
+.profile{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding: 25px 25px;
+    background-color: #282C34;
+    flex-direction: column;
+    width: 100%;
+    font-family: 'Roboto Mono', monospace;
+    color: #ABB2BF;
+}
+
+.contact-bottom{
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-info{
+    display: inline-block;
+    line-height: 2;
+}
+
+.profile-body{
+    display: flex;
+    justify-content: center;
+}
+
