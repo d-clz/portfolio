@@ -7,8 +7,8 @@
 }
 
 .image img{
-    width: 17vw;
-    height: 17vw;
+    width: 15vw;
+    height: 15vw;
     border-radius: 100%;
     text-align: center;
     object-fit: cover;
@@ -30,7 +30,7 @@
 /* CARD */
 .card-container{
     display: flex;
-    width: 60%;
+    width: 800px;
     height: auto;
     background: linear-gradient(to right, #282C34, #414348); /* #2FEBD4, #DEFFFD*/
     border-radius: 12px;
