@@ -35,7 +35,7 @@ import Skills from "../components/Skills.astro";
                 </div>
                 <hr>
                 <div class="profile-body">
-                    <div style="width: 50%">
+                    <div style="width: 50%; margin: 0 30px">
                         <Education
                                 title="Physics Majoring - BOK27B"
                                 details="High School for Gifted Student, Hanoi University of Sciences"
@@ -53,7 +53,7 @@ import Skills from "../components/Skills.astro";
                         />
 
                     </div>
-                    <div style="width: 50%">
+                    <div style="width: 50%; margin: 0 30px">
                         <Experience
                                 title="Maintain Homelab Virtual Environment"
                                 time="Since 2017"
@@ -85,16 +85,31 @@ import Skills from "../components/Skills.astro";
                     ">Skills & Capacities</span>
                 </div>
                 <hr>
-                <Skills/>
-                <ul>
-                    <li>More than 7 years of experience working with Linux and Unix-like Operating Systems.</li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                </ul>
+                <div class="content-container">
+                    <div class="list-container">
+                        <Skills/>
+                        <ul>
+                            <li>
+                                <strong>Operating System: </strong>More than 7 years of experience managng & operating linux and unix-like system. Specialize in containerize engine with hand-on expertise in lxc, lxd, dockerd, containerd, cri-o, podman, and more.
+                            </li>
+                            <li>
+                                <strong>Scripting Language: </strong>Proficient in Shell, Python, NodeJS and GoLang with extensive experience in automation and scripting to streamline processes and improve efficiency.
+                            </li>
+                            <li>
+                                <strong>Technology & Architecture: </strong>Experienced in designing and implementing complex high-availability (HA) systems, incorporating MongoDB, PostgresSQL, Redis, RabbitMQ, Kafka, Kubernetes Cluster, etc. in both Cloud & On-Premises environment.
+                            </li>
+                            <li>
+                                <strong>Product Management Knowledge: </strong>Strong understanding of APIs, network protocols, and coding patterns. Extensive participation in software product development across multiple levels, including B2B and B2C environments. And proven track record of managing user bases ranging from approximately 20,000 to more than 10 million users.
+                            </li>
+                            <li>
+                                <strong>Soft Skills: </strong>Fluent in reading and comprehending technical documents in English, with strong communication skills. Possess excellent self-research abilities and independent problem-solving skills.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
             <div class="profile">
-                <div style="
+                <div class="list-container" style="
                     display: inline-block;
                     color: #61AFEF;
                     margin-bottom: 8px;
