@@ -1,0 +1,461 @@
+---
+// src/components/Terminal.astro
+// Interactive terminal, ported from firasel/Terminal-Portfolio (MIT) to vanilla Astro.
+import WindowChrome from "./WindowChrome.astro";
+import { PROMPT_LABEL, QUICK_COMMANDS, ROUTES } from "../data/terminal-data";
+---
+
+<section class="terminal">
+    <WindowChrome title={PROMPT_LABEL}>
+        <a class="win-action" href={ROUTES.card}>← card</a>
+    </WindowChrome>
+
+    <div class="terminal-body" id="terminalBody">
+        <p class="hint">
+            Type "<span class="key">help</span>" for available commands
+        </p>
+
+        <div class="terminal-output" id="terminalOutput"></div>
+
+        <div class="prompt-line">
+            <span class="prompt-arrow" aria-hidden="true">➜</span>
+            <span class="prompt-path" aria-hidden="true">~</span>
+            <span class="input-wrap">
+                <input
+                    id="terminalInput"
+                    type="text"
+                    autocomplete="off"
+                    spellcheck="false"
+                    aria-label="Terminal command input"
+                />
+                <span class="block-cursor" id="blockCursor" aria-hidden="true"></span>
+            </span>
+        </div>
+    </div>
+
+    <footer class="terminal-footer">
+        <div class="inner">
+            <div class="quick-commands">
+                {QUICK_COMMANDS.map((cmd) => (
+                    <button type="button" data-command={cmd}>
+                        <b aria-hidden="true">❯</b> {cmd}
+                    </button>
+                ))}
+            </div>
+            <div class="status"><i aria-hidden="true"></i> Online</div>
+        </div>
+    </footer>
+</section>
+
+<div class="sound-control" id="soundControl" data-muted="false">
+    <button type="button" id="soundToggle" aria-label="Mute" title="Mute">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path class="wave" d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path class="wave" d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+            <path class="cross" d="M23 9l-6 6M17 9l6 6" style="display: none"></path>
+        </svg>
+    </button>
+    <div class="slider">
+        <input type="range" id="volumeRange" min="0" max="100" step="1" value="50" aria-label="Volume control" />
+    </div>
+</div>
+
+<script>
+    import {
+        CONTACT,
+        EDGE,
+        EXPERIENCE,
+        PROFILE,
+        PROJECTS,
+        ROUTES,
+        SKILL_GROUPS,
+        SOCIAL_LINKS,
+    } from "../data/terminal-data";
+
+    const SOUNDS = {
+        keyPress: "/sounds/keyPress.mp3",
+        textPrint: "/sounds/textPrint.mp3",
+        error: "/sounds/error.mp3",
+        clear: "/sounds/clear.mp3",
+    };
+
+    const body = document.getElementById("terminalBody") as HTMLDivElement;
+    const output = document.getElementById("terminalOutput") as HTMLDivElement;
+    const input = document.getElementById("terminalInput") as HTMLInputElement;
+    const cursor = document.getElementById("blockCursor") as HTMLSpanElement;
+
+    /* ------------------------------------------------------------- helpers */
+
+    const esc = (value: string) =>
+        String(value).replace(/[&<>"]/g, (c) =>
+            ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c] as string,
+        );
+
+    /** Builds a detached element from an HTML string. */
+    function block(className: string, html: string): HTMLDivElement {
+        const el = document.createElement("div");
+        el.className = className;
+        el.innerHTML = html;
+        return el;
+    }
+
+    const str = (value: string) => `<span class="t-str">"${esc(value)}"</span>`;
+    const key = (name: string) => `<span class="t-key">"${name}"</span>`;
+    const list = (values: string[]) => values.map(str).join(", ");
+
+    const link = (href: string, label: string) =>
+        `<a href="${esc(href)}" target="_blank" rel="noreferrer">"${esc(label)}"</a>`;
+
+    /* ----------------------------------------------------------- templates */
+
+    function CommandTemplate(cmd: string) {
+        return block(
+            "prompt-line",
+            `<span class="prompt-arrow">➜</span>
+             <span class="prompt-path">~</span>
+             <span class="cmd">${esc(cmd)}</span>`,
+        );
+    }
+
+    function ErrorTemplate(cmd: string) {
+        return block(
+            "t-error",
+            `<strong>${esc(cmd)}</strong>: command not found
+             <p>Type "<span class="key">help</span>" to see all available commands</p>`,
+        );
+    }
+
+    function HelpTemplate() {
+        const entries: Array<[string, string]> = [
+            ["about", "who I am"],
+            ["skills", "view my skill set"],
+            ["experience", "work experience"],
+            ["projects", "things I have built"],
+            ["contact", "get in touch"],
+            ["clear", "clear the terminal"],
+            ["help", "show all commands"],
+        ];
+
+        return block(
+            "t-card",
+            `<p class="help-title">Available commands:</p>
+             <div class="help-grid">
+               ${entries
+                   .map(
+                       ([cmd, desc]) =>
+                           `<div><b>${esc(cmd)}</b> <span>— ${esc(desc)}</span></div>`,
+                   )
+                   .join("")}
+             </div>`,
+        );
+    }
+
+    /** Identity plus the pointer into everything else — the landing command. */
+    function AboutTemplate() {
+        return block(
+            "t-card",
+            `<pre>${esc(PROFILE.name)} — ${esc(PROFILE.role)}
+${esc(PROFILE.experience)} of designing and operating infrastructure.
+Type <span class="t-key">help</span> to explore.</pre>`,
+        );
+    }
+
+    function SkillsTemplate() {
+        const json = SKILL_GROUPS.map(
+            (group) => `  ${key(group.key)}: [${list(group.values)}]`,
+        ).join(",\n");
+
+        const edges = EDGE.map(
+            (item) => `
+            <div class="edge">
+              <h4>${esc(item.title)}</h4>
+              <p>${esc(item.body)}</p>
+            </div>`,
+        ).join("");
+
+        return block(
+            "",
+            `<div class="edge-list">${edges}</div>
+             <div class="t-card">
+               <pre><span class="t-comment">// Working inventory</span>
+{
+${json}
+}</pre>
+             </div>`,
+        );
+    }
+
+    function ExperienceTemplate() {
+        const current = EXPERIENCE.current;
+
+        const steps = EXPERIENCE.timeline
+            .map(
+                (step) => `
+            <div class="timeline-item">
+              <div class="row">
+                <h4><span class="xp-year">${esc(step.year)}</span>${esc(step.title)}</h4>
+                ${step.context ? `<span class="time">${esc(step.context)}</span>` : ""}
+              </div>
+              <p>${esc(step.story)}</p>
+              <div class="tags">
+                ${step.tags.map((t) => `<span class="tag">${esc(t)}</span>`).join("")}
+              </div>
+            </div>`,
+            )
+            .join("");
+
+        return block(
+            "",
+            `<div class="xp-head">
+               <div class="row">
+                 <h3>${esc(current.title)}</h3>
+                 <span class="time">${esc(current.time)}</span>
+               </div>
+               <p>${esc(current.kind)}</p>
+             </div>
+             <div class="timeline">${steps}</div>`,
+        );
+    }
+
+
+    function ProjectsTemplate() {
+        const cards = PROJECTS.map((project) => {
+            const href = project.liveLink || project.github;
+            const open = href
+                ? `<a class="project-card" href="${esc(href)}" target="_blank" rel="noreferrer">`
+                : `<div class="project-card">`;
+            const close = href ? "</a>" : "</div>";
+
+            return `${open}
+              <div class="tags">
+                <span class="tag ${project.badgeColor}">${esc(project.badge)}</span>
+                <span class="tag">${esc(project.stack)}</span>
+                ${project.technology.map((t) => `<span class="tag">${esc(t)}</span>`).join("")}
+              </div>
+              <h3>${esc(project.title)}</h3>
+              <p>${esc(project.tagline)}</p>
+            ${close}`;
+        }).join("");
+
+        return block(
+            "",
+            `<div class="project-grid">${cards}</div>`,
+        );
+    }
+
+
+
+
+    /** Everything reachable — direct contact and the profiles, in one place. */
+    function ContactTemplate() {
+        return block(
+            "t-card",
+            `<pre><span class="t-comment">// Contact</span>
+{
+  ${key("email")}: <a href="mailto:${esc(CONTACT.email)}">"${esc(CONTACT.email)}"</a>,
+  ${key("location")}: ${str(CONTACT.location)},
+  ${key("github")}: ${link(SOCIAL_LINKS.github, "github.com/d-clz")},
+  ${key("linkedin")}: ${link(SOCIAL_LINKS.linkedin, "linkedin.com/in/dclz")},
+  ${key("blog")}: ${link(SOCIAL_LINKS.blog, "d-clz.github.io")},
+  ${key("open_to")}: [${list(CONTACT.openTo)}]
+}</pre>
+             <p class="t-note">Type "<span class="key">github</span>", "<span class="key">linkedin</span>" or "<span class="key">blog</span>" to open in a new tab</p>`,
+        );
+    }
+
+
+
+    /* ------------------------------------------------------------ registry */
+
+    type Command =
+        | { type: "template"; template: () => HTMLDivElement }
+        | { type: "link"; url: string }
+        | { type: "special" };
+
+    const COMMAND_REGISTRY: Record<string, Command> = {
+        help: { type: "template", template: HelpTemplate },
+        about: { type: "template", template: AboutTemplate },
+        // unlisted aliases — natural guesses shouldn't error
+        whoami: { type: "template", template: AboutTemplate },
+        banner: { type: "template", template: AboutTemplate },
+        skills: { type: "template", template: SkillsTemplate },
+        experience: { type: "template", template: ExperienceTemplate },
+        xp: { type: "template", template: ExperienceTemplate },
+        projects: { type: "template", template: ProjectsTemplate },
+        contact: { type: "template", template: ContactTemplate },
+        social: { type: "template", template: ContactTemplate },
+        socials: { type: "template", template: ContactTemplate },
+
+        github: { type: "link", url: SOCIAL_LINKS.github },
+        linkedin: { type: "link", url: SOCIAL_LINKS.linkedin },
+        blog: { type: "link", url: SOCIAL_LINKS.blog },
+
+        clear: { type: "special" },
+        home: { type: "special" },
+        exit: { type: "special" },
+    };
+
+
+    /* --------------------------------------------------------------- sound */
+
+    let volume = 0.5;
+    let mutedVolume = 0.5;
+
+    function playSound(src: string) {
+        if (volume === 0) return;
+        const audio = new Audio(src);
+        audio.volume = volume;
+        void audio.play().catch(() => {
+            /* autoplay blocked until the first user interaction */
+        });
+    }
+
+    /* ------------------------------------------------------------- history */
+
+    const history: string[] = [];
+    let historyIndex = 0;
+
+    /* ----------------------------------------------------------- execution */
+
+    function scrollToBottom() {
+        body.scroll({ behavior: "smooth", top: body.scrollHeight });
+    }
+
+    function executeCommand(raw: string) {
+        const trimmed = raw.trim();
+        if (!trimmed) return;
+
+        history.push(trimmed);
+        historyIndex = history.length;
+
+        const command = trimmed.toLowerCase();
+        const definition = COMMAND_REGISTRY[command];
+
+        if (definition) {
+            switch (definition.type) {
+                case "template":
+                    playSound(SOUNDS.textPrint);
+                    output.append(CommandTemplate(trimmed), definition.template());
+                    break;
+                case "link":
+                    playSound(SOUNDS.textPrint);
+                    output.append(CommandTemplate(trimmed));
+                    window.open(definition.url, "_blank", "noopener");
+                    break;
+                case "special":
+                    if (command === "clear") {
+                        playSound(SOUNDS.clear);
+                        output.innerHTML = "";
+                        return;
+                    }
+                    // home / exit
+                    playSound(SOUNDS.textPrint);
+                    window.location.href = ROUTES.card;
+                    return;
+            }
+        } else {
+            playSound(SOUNDS.error);
+            output.append(CommandTemplate(trimmed), ErrorTemplate(trimmed));
+        }
+
+        scrollToBottom();
+    }
+
+    /* -------------------------------------------------------------- events */
+
+    /** Moves the block cursor to the caret column, accounting for h-scroll. */
+    function syncCursor() {
+        const col = input.selectionStart ?? input.value.length;
+        cursor.style.setProperty("--col", String(col));
+        cursor.style.setProperty("--scroll", `${input.scrollLeft}px`);
+    }
+
+    input.addEventListener("input", () => {
+        playSound(SOUNDS.keyPress);
+        syncCursor();
+    });
+
+    // Caret moves after the default keydown action, so sync on the next frame.
+    ["keydown", "keyup", "click", "focus", "select", "scroll"].forEach((type) => {
+        input.addEventListener(type, () => requestAnimationFrame(syncCursor));
+    });
+
+    input.addEventListener("keydown", (event) => {
+        switch (event.key) {
+            case "Enter":
+                executeCommand(input.value);
+                input.value = "";
+                break;
+            case "ArrowUp":
+                event.preventDefault();
+                if (historyIndex > 0) historyIndex -= 1;
+                input.value = history[historyIndex] ?? "";
+                break;
+            case "ArrowDown":
+                event.preventDefault();
+                if (historyIndex < history.length) historyIndex += 1;
+                input.value = history[historyIndex] ?? "";
+                break;
+            case "l":
+                if (event.ctrlKey) {
+                    event.preventDefault();
+                    playSound(SOUNDS.clear);
+                    output.innerHTML = "";
+                }
+                break;
+        }
+    });
+
+    body.addEventListener("click", (event) => {
+        if ((event.target as HTMLElement).closest("a, button")) return;
+        input.focus();
+    });
+
+    document.querySelectorAll<HTMLButtonElement>(".quick-commands button").forEach((button) => {
+        button.addEventListener("click", () => {
+            executeCommand(button.dataset.command ?? "");
+            input.focus();
+        });
+    });
+
+    /* ------------------------------------------------------- sound control */
+
+    const soundControl = document.getElementById("soundControl") as HTMLDivElement;
+    const soundToggle = document.getElementById("soundToggle") as HTMLButtonElement;
+    const volumeRange = document.getElementById("volumeRange") as HTMLInputElement;
+    const waves = soundToggle.querySelectorAll<SVGPathElement>(".wave");
+    const cross = soundToggle.querySelector<SVGPathElement>(".cross") as SVGPathElement;
+
+    function renderSoundState() {
+        const muted = volume === 0;
+        soundControl.dataset.muted = String(muted);
+        soundToggle.setAttribute("aria-label", muted ? "Unmute" : "Mute");
+        soundToggle.title = muted ? "Unmute" : "Mute";
+        waves.forEach((wave) => {
+            wave.style.display = muted ? "none" : "";
+        });
+        cross.style.display = muted ? "" : "none";
+        volumeRange.value = String(Math.round(volume * 100));
+    }
+
+    volumeRange.addEventListener("input", () => {
+        volume = Number(volumeRange.value) / 100;
+        if (volume > 0) mutedVolume = volume;
+        renderSoundState();
+    });
+
+    soundToggle.addEventListener("click", () => {
+        if (volume > 0) {
+            mutedVolume = volume;
+            volume = 0;
+        } else {
+            volume = mutedVolume || 0.5;
+        }
+        renderSoundState();
+    });
+
+    renderSoundState();
+    syncCursor();
+    input.focus();
+</script>

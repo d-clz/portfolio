@@ -1,0 +1,70 @@
+/* src/styles/background.css
+   Animated liquid-blob backdrop shared by the card (/) and the terminal (/details).
+   Ported from firasel/Terminal-Portfolio (MIT).
+
+   Anything layered on top of this must avoid an opaque background: a block's
+   background paints above negative-z-index children, which would bury the blobs. */
+
+:root {
+    --bg-body: #050508;
+    --blob-purple: #2e1a47;
+    --blob-gray: #1c1c24;
+    --blob-blue: #1a2340;
+    --blob-blur: 5rem;
+    --blob-opacity: 0.6;
+}
+
+body {
+    background-color: var(--bg-body);
+    overflow-x: hidden;
+}
+
+.liquid-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    background: #000;
+    overflow: hidden;
+}
+
+.liquid-bg span {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(var(--blob-blur));
+    opacity: var(--blob-opacity);
+    animation: blob-float 20s ease-in-out infinite;
+}
+
+.liquid-bg .blob-1 {
+    top: -10%;
+    left: -10%;
+    width: 50vw;
+    height: 50vw;
+    background: var(--blob-purple);
+}
+
+.liquid-bg .blob-2 {
+    bottom: -10%;
+    right: -10%;
+    width: 55vw;
+    height: 55vw;
+    background: var(--blob-gray);
+}
+
+.liquid-bg .blob-3 {
+    top: 45%;
+    left: 40%;
+    width: 30vw;
+    height: 30vw;
+    background: var(--blob-blue);
+}
+
+@keyframes blob-float {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, -50px) scale(1.2); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .liquid-bg span { animation: none; }
+}

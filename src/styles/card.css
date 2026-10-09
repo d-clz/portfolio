@@ -1,58 +1,116 @@
 /* CSS CARD */
 /* IMAGE */
+/* Framed as a terminal pane: rounded square, hairline border, scanline overlay
+   and a monospace path caption. The photo itself is left untouched. */
 .image{
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
+    gap: 10px;
 }
 
-.image img{
+.photo-frame{
+    position: relative;
     width: 250px;
     height: 250px;
-    border-radius: 100%;
-    text-align: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .15);
+    border-radius: 10px;
+    background: rgba(0, 0, 0, .25);
+    box-shadow: 0 10px 20px -8px rgba(0, 0, 0, .5);
+}
+
+.photo-frame img{
+    display: block;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     object-position: center;
 }
 
+/* 1px dark line every 3px, sitting over the photo. */
+.photo-frame::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, .18) 0,
+        rgba(0, 0, 0, .18) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+}
+
+.photo-caption{
+    font-family: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 12px;
+    color: rgba(255, 255, 255, .4);
+}
+
 /* CONTAINER */
+/* Transparent so the .liquid-bg blobs show through — an opaque background here
+   would paint over them. The page colour lives on <body>. */
 .container{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #131516;
+    min-height: 100vh;
     font-family: 'Roboto Mono', monospace;
-    padding: 0 25px;
+    padding: 25px;
 }
 
-/* CARD */
+/* WINDOW */
+/* Same One Dark gradient as before, now translucent over frosted glass so the
+   drifting blobs read through it — matching the terminal window on /details. */
+.card-window{
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+    max-width: 100%;
+    overflow: hidden;
+    background: linear-gradient(to right, rgba(40, 44, 52, .72), rgba(65, 67, 72, .6));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 12px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, .5);
+}
+
+/* CARD BODY */
 .card-container{
     display: flex;
-    width: 800px;
-    height: auto;
-    background: linear-gradient(to right, #282C34, #414348); /* #2FEBD4, #DEFFFD*/
-    border-radius: 12px;
-    box-shadow: 1px 7px 10px 2px rgba(0, 0, 0, .15);
 }
 
-.title{
-    margin: 0;
+/* IDENTITY IN THE TITLE BAR */
+/* Name and role live in the window chrome, keeping the One Dark accents. */
+.win-identity{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex-wrap: wrap;
 }
 
-.bi-linkedin{
-    color: #61AFEF;
+.win-name{
+    color: #98C379;
+    font-weight: 600;
 }
-.bi-globe2{
-    color: #56B6C2;
+
+.win-sep{
+    color: rgba(255, 255, 255, .3);
 }
-.bi-caret-right-fill{
-    color: #ABB2BF;
+
+.win-role{
+    color: #E5C07B;
 }
 
 .descripcion{
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     flex-direction: column;
 }
 
@@ -62,15 +120,7 @@
     color: #FFFFFF;
 }
 
-.descripcion h2{
-    line-height: 2;
-    font-weight: 400;
-    font-size: medium;
-    color: #E5C07B;
-}
-
 .descripcion p{
-    padding-top: 30px;
     padding-bottom: 20px;
     font-weight: 100;
     font-size: 14px;
@@ -79,99 +129,101 @@
     text-align: justify-all;
 }
 
-.descripcion h1{
-    font-weight: 550;
-    color: #98C379;
+/* LAUNCH BUTTON */
+/* Reads as a terminal prompt: chevron, label, blinking block cursor. */
+.launch-btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    align-self: flex-start;
+    margin-top: 20px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .05);
+    border: 1px solid rgba(255, 255, 255, .15);
+    font-family: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 14px;
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: background .3s, border-color .3s, transform .3s, box-shadow .3s;
 }
 
-/* ICONS */
-.descripcion .icons{
-    margin-top: 30px;
-}
-.descripcion .icons a{
-    display: inline-block;
-    margin: 0 30px 0 30px;
-    color: #ffffff;
-    font-size: 30px;
-    transition: .3s;
-}
-a:hover{
-    transform: translateY(-3px) scale(1.05);
+.launch-btn:hover{
+    background: rgba(255, 255, 255, .14);
+    border-color: rgba(255, 255, 255, .35);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, .25);
 }
 
-/* TOOLTIP */
-.tooltip-text {
-    position: absolute;
-    top: -25px;
-    left: -115%;
-    z-index: 2;
-    width: 100px;
-    color: white;
-    font-size: 12px;
-    background-color: #282C34;
-    border-radius: 10px;
-    padding: 5px 10px 5px 10px;
+.launch-btn .chevron{
+    color: #32d74b;
+    font-weight: 700;
 }
-#fade {
-    opacity: 0;
-    transition: opacity 0.3s;
+
+.launch-btn .caret{
+    width: 1ch;
+    height: 1.15em;
+    background: #FFFFFF;
+    animation: launch-blink 1.06s steps(1) infinite;
 }
-.hover-text:hover #fade { opacity: 1; }
-.hover-text {
-    position: relative;
-    display: inline-block;
-    margin: 10px;
-    font-family: 'Roboto Thin', sans-serif;
-    font-weight: 100;
-    text-align: center;
+
+@keyframes launch-blink{
+    0%, 50% { opacity: 1; }
+    50.01%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce){
+    .launch-btn .caret{ animation: none; }
 }
 
 /* RESPONSIVE */
-@media (max-width: 576px){
+/* Stack below 768px. The two-column layout needs the full 800px to work — from
+   577 to 767 the 250px photo squeezed the text into a ribbon and pushed the
+   button out of the card. */
+@media (max-width: 767px){
     .container{
-        height: 100vh;
-        padding: 0 15px;
+        min-height: 100vh;
+        padding: 15px;
     }
-    .card-container{
-        display: flex;
-        flex-direction: column-reverse;
-        background: linear-gradient(#696969, #9b9b9b); /* #2FEBD4, #DEFFFD*/
-        width: 750px;
+    .card-window{
         margin-top: 12px;
         margin-bottom: 12px;
     }
-    .image img{
+    .card-container{
+        flex-direction: column-reverse;
+    }
+    .image{
+        padding: 20px 0 0 0;
+    }
+    .descripcion{
+        padding: 20px 24px 24px 24px;
+    }
+    .launch-btn{
+        align-self: stretch;
+        justify-content: center;
+        margin-top: 12px;
+    }
+}
+
+/* Phones: shrink the photo so it doesn't dominate the stacked layout. */
+@media (max-width: 576px){
+    .photo-frame{
         width: 90px;
         height: 90px;
+        border-radius: 8px;
+    }
+    .photo-caption{
+        font-size: 10px;
     }
     .image{
         padding: 15px 0 0 0;
+        gap: 6px;
     }
     .descripcion{
         padding: 10px 20px 18px 20px;
     }
-    .descripcion h1{
-        font-weight: 400;
-        font-size: 25px;
-    }
-    .descripcion h2{
-        line-height: 2;
-        font-weight: 500;
-        font-size: 17px;
-    }
     .descripcion p{
         font-weight: 300;
         font-size: 15px;
-    }
-    .descripcion .icons{
-        margin-top: 18px;
-    }
-}
-@media (min-width: 320px){
-    .icons{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 20px;
     }
 }

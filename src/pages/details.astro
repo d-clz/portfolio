@@ -1,0 +1,17 @@
+---
+// src/pages/details.astro
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+import LiquidBackground from "../components/LiquidBackground.astro";
+import Terminal from "../components/Terminal.astro";
+import { PAGES } from "../data/terminal-data";
+import "../styles/background.css";
+import "../styles/terminal.css";
+---
+
+<BaseLayout title={PAGES.details.title} description={PAGES.details.description}>
+    <LiquidBackground />
+    <div class="terminal-page">
+        <Terminal />
+    </div>
+</BaseLayout>

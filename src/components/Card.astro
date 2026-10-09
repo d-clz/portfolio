@@ -1,47 +1,36 @@
 ---
 //src/components/Card.astro
-const {name, position, aboutMe, linkedin, blog, github, cvLink, profileImage } = Astro.props;
+const { name, position, aboutMe, cvLink, profileImage } = Astro.props;
 
+import { Image } from 'astro:assets';
+import WindowChrome from './WindowChrome.astro';
 import '../styles/card.css';
 ---
 
 <div class="container">
-    <div class="card-container">
-        <div class="descripcion">
-            <div class="tilte">
-                <h1>{name}</h1>
-                <h2>{position}</h2>
-            </div>
-            <p>{aboutMe}</p>
-            <div class="icons">
-                <a href={linkedin} class="hover-text" target="_blank">
-                    <i class="bi bi-linkedin"></i>
-                    <span class="tooltip-text" id="fade">
-                        LinkedIn
-                    </span>
-                </a>
-                <a href={github} class="hover-text" target="_blank">
-                    <i class="bi bi-github"></i>
-                    <span class="tooltip-text" id="fade">
-                        GitHub
-                    </span>
-                </a>
-                <a href={blog} class="hover-text" target="_blank">
-                    <i class="bi bi-globe2"></i>
-                    <span class="tooltip-text" id="fade">
-                        Blog
-                    </span>
-                </a>
-                <a href={cvLink} class="hover-text">
-                    <i class="bi bi-caret-right-fill"></i>
-                    <span class="tooltip-text" id="fade">
-                        Resume
-                    </span>
+    <div class="card-window">
+        <WindowChrome>
+            <span slot="title" class="win-identity">
+                <span class="win-name">{name}</span>
+                <span class="win-sep" aria-hidden="true">—</span>
+                <span class="win-role">{position}</span>
+            </span>
+        </WindowChrome>
+
+        <div class="card-container">
+            <div class="descripcion">
+                <p>{aboutMe}</p>
+                <a class="launch-btn" href={cvLink}>
+                    <span class="chevron" aria-hidden="true">❯</span>
+                    <span class="label">more information</span>
                 </a>
             </div>
-        </div>
-        <div class="image">
-            <img src={profileImage} alt="">
+            <div class="image">
+                <div class="photo-frame">
+                    <Image src={profileImage} alt="" width={250} height={250} densities={[1, 2]} />
+                </div>
+                <span class="photo-caption">~/profile.jpg</span>
+            </div>
         </div>
     </div>
 </div>

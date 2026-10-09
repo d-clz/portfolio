@@ -3,22 +3,21 @@
 
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Card from "../components/Card.astro";
+import LiquidBackground from "../components/LiquidBackground.astro";
+import profilePic from "../assets/profile-pic.jpg";
+import { BIO, PAGES, PROFILE, ROUTES } from "../data/terminal-data";
+import "../styles/background.css";
 ---
 
-<!-- profile2.webp you can remove | Photo <a href="https://unsplash.com/es/@charlesdeluvio?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">charlesdeluvio</a> en <a href="https://unsplash.com/es/fotos/hombre-con-gorro-negro-kVg2DQTAK7c?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
-   -->
-
-<!-- You can replace the card's data with your own here. -->
-<BaseLayout title="Information Card" description="Meta description. Here goes your page description. Provide a clear and concise summary of the content.">
+<!-- All content comes from src/data/terminal-data.ts — edit it there. -->
+<BaseLayout title={PAGES.card.title} description={PAGES.card.description}>
+	<LiquidBackground />
 	<Card
-	  name="Duong Hoang"
-	  position="DevOps / SRE"
-	  aboutMe={`Howdy! I'm Duong, a senior DevOps Engineer.\n\nWith more than 5 years of experience, I specialize in designing, implementing, and maintaining scalable, secure, and efficient infrastructure.\nI thrive on automating pipelines/tasks, optimizing system performance and ensuring high-availability.\n\nWith strong self-researching & problem-solving skills, I'm excited to collaborate with visionary teams to deliver outstanding results.`}
-	  linkedin="https://www.linkedin.com/in/dclz"
-	  github="https://github.com/d-clz"
-	  blog="https://d-clz.github.io"
-	  cvLink="/resume"
-	  profileImage="/images/profile-pic.jpg"
+	  name={PROFILE.name}
+	  position={PROFILE.role}
+	  aboutMe={BIO}
+	  cvLink={ROUTES.details}
+	  profileImage={profilePic}
 	/>
 </BaseLayout>
 
