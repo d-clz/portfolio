@@ -17,8 +17,8 @@ import Card from "../components/Card.astro";
 	  linkedin="https://www.linkedin.com/in/dclz"
 	  github="https://github.com/d-clz"
 	  blog="https://d-clz.github.io"
-	  cvLink="/resume"
-	  profileImage="/images/profile-pic.jpg"
+	  cvLink={`${import.meta.env.BASE_URL}resume/`}
+	  profileImage={`${import.meta.env.BASE_URL}images/profile-pic.jpg`}
 	/>
 </BaseLayout>
 
