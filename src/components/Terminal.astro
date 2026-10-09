@@ -74,10 +74,10 @@ import { PROMPT_LABEL, QUICK_COMMANDS, ROUTES } from "../data/terminal-data";
     } from "../data/terminal-data";
 
     const SOUNDS = {
-        keyPress: "/sounds/keyPress.mp3",
-        textPrint: "/sounds/textPrint.mp3",
-        error: "/sounds/error.mp3",
-        clear: "/sounds/clear.mp3",
+        keyPress: `${import.meta.env.BASE_URL}sounds/keyPress.mp3`,
+        textPrint: `${import.meta.env.BASE_URL}sounds/textPrint.mp3`,
+        error: `${import.meta.env.BASE_URL}sounds/error.mp3`,
+        clear: `${import.meta.env.BASE_URL}sounds/clear.mp3`,
     };
 
     const body = document.getElementById("terminalBody") as HTMLDivElement;

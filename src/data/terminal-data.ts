@@ -37,9 +37,11 @@ export const SOCIAL_LINKS = {
   blog: "https://d-clz.github.io",
 };
 
+const BASE = import.meta.env.BASE_URL;
+
 export const ROUTES = {
-  card: "/",
-  details: "/details",
+  card: BASE,
+  details: `${BASE}details/`,
 };
 
 export const PROMPT_LABEL = `${FIRST_NAME.toLowerCase()} — zsh`;
