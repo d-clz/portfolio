@@ -1,7 +1,9 @@
 ---
 // src/components/WindowChrome.astro
-// macOS-style title bar. Anything passed as a child renders on the right side.
+// macOS-style title bar. Anything passed as a child renders on the right side,
+// before the dark/light toggle shared by both pages.
 import '../styles/window.css';
+import ThemeToggle from './ThemeToggle.astro';
 
 const { title, icon = "📁" } = Astro.props;
 ---
@@ -18,5 +20,8 @@ const { title, icon = "📁" } = Astro.props;
             <slot name="title"><span>{title}</span></slot>
         </div>
     </div>
-    <slot />
+    <div class="win-right">
+        <slot />
+        <ThemeToggle />
+    </div>
 </header>

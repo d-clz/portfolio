@@ -1,0 +1,54 @@
+/* src/styles/palette.css
+   Poimandres — same system as the blog (d-clz.github.io), ported here so
+   both sites read as one. RGB-triplet custom properties (e.g. --fg-rgb)
+   exist alongside hex so call sites can do rgba(var(--fg-rgb), .1) for
+   variable-opacity borders/overlays without hardcoding a color twice.
+
+   Poimandres has no official light companion; the light variant below is
+   derived in-house — same accent hues, darkened/resaturated for contrast
+   on a light background — not a canonical source like the dark side is.
+
+   Four accent hues (cyan/blue/pink/purple) cover every role this site
+   needs (links, prompt arrow, JSON syntax colors, project tag categories)
+   without reaching for yellow. */
+
+:root {
+  color-scheme: dark;
+
+  --bg-rgb: 27, 30, 40;       /* #1b1e28 */
+  --bg: rgb(var(--bg-rgb));
+
+  --panel1-rgb: 48, 51, 64;   /* #303340 — elevated panel tone */
+  --panel2-rgb: 27, 30, 40;   /* #1b1e28 */
+
+  --fg-rgb: 166, 172, 205;    /* #a6accd — body text, also used for low-alpha borders/overlays */
+  --fg: rgb(var(--fg-rgb));
+  --fg-strong: #e4f0fb;
+  --muted: #767c9d;
+
+  --accent-rgb: 93, 228, 199;    /* #5de4c7 — cyan, primary/terminal-green role */
+  --accent: rgb(var(--accent-rgb));
+  --accent2-rgb: 137, 221, 255;  /* #89ddff — blue, secondary accent */
+  --accent2: rgb(var(--accent2-rgb));
+  --accent3-rgb: 208, 103, 157;  /* #d0679d — pink */
+  --accent3: rgb(var(--accent3-rgb));
+  --accent4-rgb: 240, 135, 189;  /* #f087bd — purple (Poimandres' charts.purple) */
+  --accent4: rgb(var(--accent4-rgb));
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg-rgb: 244, 244, 248;    /* #f4f4f8 */
+  --panel1-rgb: 255, 255, 255;
+  --panel2-rgb: 233, 233, 242;
+
+  --fg-rgb: 42, 45, 58;       /* #2a2d3a */
+  --fg-strong: #14151c;
+  --muted: #5d6080;
+
+  --accent-rgb: 15, 157, 130;    /* darkened cyan for contrast on light bg */
+  --accent2-rgb: 31, 122, 173;   /* darkened blue */
+  --accent3-rgb: 168, 56, 107;   /* darkened pink */
+  --accent4-rgb: 175, 51, 118;   /* darkened purple */
+}

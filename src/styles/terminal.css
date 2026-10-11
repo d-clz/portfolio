@@ -1,30 +1,17 @@
 /* src/styles/terminal.css
-   Vanilla-CSS port of firasel/Terminal-Portfolio (MIT) for the Astro resume page. */
+   Vanilla-CSS port of firasel/Terminal-Portfolio (MIT) for the Astro resume page.
+   Colors now come from palette.css's Poimandres semantic tokens instead of a
+   fixed indigo/emerald/JSON-syntax set, so the page follows the site's
+   dark/light toggle. */
 
 :root {
-    --glass-surface: rgba(30, 30, 40, 0.5);
-    --glass-border: rgba(255, 255, 255, 0.12);
-
-    --primary-glow: #5e5ce6;
-    --secondary-glow: #32d74b;
-    --accent-blue: #5ac8fa;
-
-    --text-primary: #ffffff;
-    --text-secondary: rgba(255, 255, 255, 0.6);
-    --text-muted: rgba(255, 255, 255, 0.4);
-
-    --json-key: #9cdcfe;
-    --json-string: #ce9178;
-    --json-number: #b5cea8;
-    --json-boolean: #569cd6;
-
     --font-mono: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 /* Page colour and the blob backdrop come from background.css; .terminal-page
    must stay transparent or it would paint over the negative-z-index blobs. */
 body {
-    color: var(--text-primary);
+    color: var(--fg-strong);
 }
 
 .terminal-page {
@@ -55,10 +42,10 @@ body {
     position: relative;
     z-index: 10;
     overflow: hidden;
-    background: var(--glass-surface);
+    background: rgba(var(--panel1-rgb), 0.5);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
-    border: 1px solid var(--glass-border);
+    border: 1px solid rgba(var(--fg-rgb), 0.12);
     border-radius: 1rem;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
@@ -90,7 +77,7 @@ body {
 .terminal-body > * + * { margin-top: 1.5rem; }
 
 .hint {
-    color: var(--text-muted);
+    color: rgba(var(--fg-rgb), 0.4);
     text-align: center;
     font-size: 0.75rem;
 }
@@ -103,11 +90,11 @@ body {
     gap: 0.5rem;
 }
 
-.prompt-arrow { color: var(--secondary-glow); }
-.prompt-path { color: var(--accent-blue); }
+.prompt-arrow { color: var(--accent); }
+.prompt-path { color: var(--accent2); }
 
 .prompt-line .cmd {
-    color: #fff;
+    color: var(--fg-strong);
     font-weight: 500;
 }
 
@@ -123,7 +110,7 @@ body {
 #terminalInput {
     flex: 1;
     min-width: 0;
-    color: #fff;
+    color: var(--fg-strong);
     background: transparent;
     border: none;
     outline: none;
@@ -139,7 +126,7 @@ body {
     width: 1ch;
     height: 1.15em;
     transform: translateY(-50%);
-    background: var(--text-primary);
+    background: var(--fg-strong);
     mix-blend-mode: difference;
     pointer-events: none;
     opacity: 0;
@@ -166,8 +153,8 @@ body {
 .t-card {
     padding: 1.5rem;
     border-radius: 0.75rem;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(var(--bg-rgb), 0.2);
+    border: 1px solid rgba(var(--fg-rgb), 0.05);
     backdrop-filter: blur(4px);
 }
 
@@ -179,15 +166,15 @@ body {
     margin: 0;
 }
 
-.t-comment { color: rgba(255, 255, 255, 0.3); }
-.t-key { color: var(--json-key); }
-.t-str { color: var(--json-string); }
-.t-num { color: var(--json-number); }
-.t-bool { color: var(--json-boolean); }
+.t-comment { color: rgba(var(--fg-rgb), 0.3); }
+.t-key { color: var(--accent2); }
+.t-str { color: var(--accent3); }
+.t-num { color: var(--accent); }
+.t-bool { color: var(--accent4); }
 
 .t-card a,
 .t-link {
-    color: var(--primary-glow);
+    color: var(--accent4);
     text-decoration: none;
 }
 
@@ -195,14 +182,16 @@ body {
 .t-link:hover { text-decoration: underline; }
 
 .t-note {
-    color: var(--text-muted);
+    color: rgba(var(--fg-rgb), 0.4);
     font-size: 0.75rem;
     margin: 1rem 0 0;
 }
 
 .t-note .key,
-.hint .key { color: var(--secondary-glow); }
+.hint .key { color: var(--accent); }
 
+/* Error state stays literal red regardless of theme/accent palette — it's a
+   semantic status color, not a design accent. */
 .t-error {
     padding: 1rem;
     border-radius: 0.75rem;
@@ -215,7 +204,7 @@ body {
 .t-error strong { font-weight: 600; }
 
 .t-error p {
-    color: var(--text-muted);
+    color: rgba(var(--fg-rgb), 0.4);
     font-size: 0.75rem;
     margin: 0.25rem 0 0;
 }
@@ -226,7 +215,7 @@ body {
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.5rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(var(--fg-rgb), 0.8);
 }
 
 @media (min-width: 768px) {
@@ -234,14 +223,14 @@ body {
 }
 
 .help-grid b {
-    color: var(--secondary-glow);
+    color: var(--accent);
     font-weight: 600;
 }
 
-.help-grid span { color: var(--text-muted); }
+.help-grid span { color: rgba(var(--fg-rgb), 0.4); }
 
 .help-title {
-    color: var(--text-secondary);
+    color: rgba(var(--fg-rgb), 0.6);
     margin: 0 0 0.75rem;
 }
 
@@ -258,25 +247,25 @@ body {
     display: block;
     padding: 1rem;
     border-radius: 0.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(var(--fg-rgb), 0.1);
+    background: rgba(var(--fg-rgb), 0.05);
     text-decoration: none;
     transition: background 0.3s, border-color 0.3s;
 }
 
-.project-card:hover { background: rgba(255, 255, 255, 0.1); }
+.project-card:hover { background: rgba(var(--fg-rgb), 0.1); }
 
 .project-card h3 {
-    color: #fff;
+    color: var(--fg-strong);
     font-size: 1rem;
     font-weight: 700;
     margin: 0 0 0.25rem;
 }
 
-.project-card:hover h3 { color: var(--primary-glow); }
+.project-card:hover h3 { color: var(--accent4); }
 
 .project-card p {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(var(--fg-rgb), 0.5);
     font-size: 0.75rem;
     margin: 0;
 }
@@ -294,20 +283,20 @@ body {
     border-radius: 0.25rem;
     font-size: 10px;
     font-weight: 700;
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(var(--fg-rgb), 0.1);
+    color: rgba(var(--fg-rgb), 0.6);
+    border: 1px solid rgba(var(--fg-rgb), 0.1);
 }
 
-.tag.indigo { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; border-color: rgba(99, 102, 241, 0.3); }
-.tag.emerald { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.3); }
-.tag.amber { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border-color: rgba(245, 158, 11, 0.3); }
-.tag.rose { background: rgba(244, 63, 94, 0.2); color: #fda4af; border-color: rgba(244, 63, 94, 0.3); }
+.tag.indigo { background: rgba(var(--accent4-rgb), 0.2); color: var(--accent4); border-color: rgba(var(--accent4-rgb), 0.3); }
+.tag.emerald { background: rgba(var(--accent-rgb), 0.2); color: var(--accent); border-color: rgba(var(--accent-rgb), 0.3); }
+.tag.amber { background: rgba(var(--accent2-rgb), 0.2); color: var(--accent2); border-color: rgba(var(--accent2-rgb), 0.3); }
+.tag.rose { background: rgba(var(--accent3-rgb), 0.2); color: var(--accent3); border-color: rgba(var(--accent3-rgb), 0.3); }
 
 /* Experience / education timeline */
 
 .xp-head {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(var(--fg-rgb), 0.1);
     padding-bottom: 1rem;
     margin-bottom: 1rem;
 }
@@ -320,19 +309,19 @@ body {
 }
 
 .xp-head h3 {
-    color: var(--primary-glow);
+    color: var(--accent4);
     font-size: 1.25rem;
     font-weight: 700;
     margin: 0;
 }
 
 .xp-head .time {
-    color: var(--text-muted);
+    color: rgba(var(--fg-rgb), 0.4);
     font-size: 0.875rem;
 }
 
 .xp-head p {
-    color: var(--text-secondary);
+    color: rgba(var(--fg-rgb), 0.6);
     font-size: 0.875rem;
     margin: 0;
 }
@@ -342,11 +331,11 @@ body {
 .timeline-item {
     position: relative;
     padding-left: 1rem;
-    border-left: 2px solid rgba(255, 255, 255, 0.1);
+    border-left: 2px solid rgba(var(--fg-rgb), 0.1);
     transition: border-color 0.2s;
 }
 
-.timeline-item:hover { border-left-color: rgba(94, 92, 230, 0.6); }
+.timeline-item:hover { border-left-color: rgba(var(--accent4-rgb), 0.6); }
 
 .timeline-item .row {
     display: flex;
@@ -364,7 +353,7 @@ body {
 }
 
 .timeline-item h4 {
-    color: #fff;
+    color: var(--fg-strong);
     font-weight: 700;
     margin: 0;
 }
@@ -374,17 +363,17 @@ body {
     display: inline-block;
     min-width: 4ch;
     margin-right: 0.75rem;
-    color: var(--secondary-glow);
+    color: var(--accent);
     font-weight: 700;
 }
 
 .timeline-item .time {
-    color: var(--text-muted);
+    color: rgba(var(--fg-rgb), 0.4);
     font-size: 0.75rem;
 }
 
 .timeline-item p {
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(var(--fg-rgb), 0.7);
     font-size: 0.875rem;
     line-height: 1.6;
     margin: 0 0 0.5rem;
@@ -396,22 +385,22 @@ body {
 
 .edge {
     padding-left: 1rem;
-    border-left: 2px solid rgba(255, 255, 255, 0.1);
+    border-left: 2px solid rgba(var(--fg-rgb), 0.1);
     transition: border-color 0.2s;
 }
 
-.edge:hover { border-left-color: rgba(94, 92, 230, 0.6); }
+.edge:hover { border-left-color: rgba(var(--accent4-rgb), 0.6); }
 
 .edge h4 {
     margin: 0 0 0.375rem;
-    color: var(--accent-blue);
+    color: var(--accent2);
     font-size: 0.95rem;
     font-weight: 700;
 }
 
 .edge p {
     margin: 0;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(var(--fg-rgb), 0.7);
     font-size: 0.875rem;
     line-height: 1.6;
 }
@@ -420,8 +409,8 @@ body {
 
 .terminal-footer {
     padding: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(var(--fg-rgb), 0.1);
+    background: rgba(var(--fg-rgb), 0.05);
     backdrop-filter: blur(12px);
 }
 
@@ -479,23 +468,23 @@ body {
     font-family: inherit;
     font-size: 0.75rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(var(--fg-rgb), 0.9);
+    background: rgba(var(--fg-rgb), 0.05);
+    border: 1px solid rgba(var(--fg-rgb), 0.1);
     backdrop-filter: blur(4px);
     cursor: pointer;
     transition: all 0.3s;
 }
 
 .quick-commands button:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.3);
+    color: var(--fg-strong);
+    background: rgba(var(--fg-rgb), 0.15);
+    border-color: rgba(var(--fg-rgb), 0.3);
     transform: translateY(-2px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
 }
 
-.quick-commands button b { color: var(--secondary-glow); }
+.quick-commands button b { color: var(--accent); }
 
 .status {
     display: flex;
@@ -503,7 +492,7 @@ body {
     gap: 0.375rem;
     font-size: 10px;
     font-weight: 500;
-    color: var(--text-muted);
+    color: rgba(var(--fg-rgb), 0.4);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     white-space: nowrap;
@@ -513,8 +502,8 @@ body {
     width: 6px;
     height: 6px;
     border-radius: 9999px;
-    background: #10b981;
-    box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+    background: var(--accent);
+    box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.5);
 }
 
 /* ------------------------------------------------------------ Sound control */
@@ -528,9 +517,9 @@ body {
     align-items: center;
     padding: 0.5rem;
     border-radius: 9999px;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(var(--bg-rgb), 0.2);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(var(--fg-rgb), 0.1);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
     transition: background 0.3s, border-color 0.3s;
 }
@@ -540,8 +529,8 @@ body {
 }
 
 .sound-control:hover {
-    background: rgba(0, 0, 0, 0.5);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(var(--bg-rgb), 0.5);
+    border-color: rgba(var(--fg-rgb), 0.2);
 }
 
 .sound-control button {
@@ -553,13 +542,13 @@ body {
     border: none;
     border-radius: 9999px;
     background: transparent;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(var(--fg-rgb), 0.8);
     cursor: pointer;
 }
 
-.sound-control button:hover { color: #fff; }
+.sound-control button:hover { color: var(--fg-strong); }
 .sound-control button:active { transform: scale(0.95); }
-.sound-control[data-muted="true"] button { color: rgba(255, 255, 255, 0.4); }
+.sound-control[data-muted="true"] button { color: rgba(var(--fg-rgb), 0.4); }
 
 .sound-control .slider {
     width: 0;
@@ -580,11 +569,11 @@ body {
     width: 100%;
     height: 6px;
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(var(--fg-rgb), 0.2);
     appearance: none;
     -webkit-appearance: none;
     cursor: pointer;
-    accent-color: #fff;
+    accent-color: var(--fg-strong);
 }
 
 .sound-control input[type="range"]::-webkit-slider-thumb {
@@ -593,7 +582,7 @@ body {
     width: 0.75rem;
     height: 0.75rem;
     border-radius: 9999px;
-    background: #fff;
+    background: var(--fg-strong);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
@@ -601,5 +590,5 @@ body {
 
 .terminal-body::-webkit-scrollbar { width: 8px; }
 .terminal-body::-webkit-scrollbar-track { background: transparent; }
-.terminal-body::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
-.terminal-body::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+.terminal-body::-webkit-scrollbar-thumb { background: rgba(var(--fg-rgb), 0.1); border-radius: 4px; }
+.terminal-body::-webkit-scrollbar-thumb:hover { background: rgba(var(--fg-rgb), 0.2); }

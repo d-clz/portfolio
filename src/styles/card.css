@@ -16,9 +16,9 @@
     height: 250px;
     flex-shrink: 0;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, .15);
+    border: 1px solid rgba(var(--fg-rgb), .15);
     border-radius: 10px;
-    background: rgba(0, 0, 0, .25);
+    background: rgba(var(--bg-rgb), .25);
     box-shadow: 0 10px 20px -8px rgba(0, 0, 0, .5);
 }
 
@@ -48,7 +48,7 @@
 .photo-caption{
     font-family: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
     font-size: 12px;
-    color: rgba(255, 255, 255, .4);
+    color: rgba(var(--fg-rgb), .4);
 }
 
 /* CONTAINER */
@@ -64,18 +64,18 @@
 }
 
 /* WINDOW */
-/* Same One Dark gradient as before, now translucent over frosted glass so the
-   drifting blobs read through it — matching the terminal window on /details. */
+/* Translucent panel gradient over frosted glass so the drifting blobs read
+   through it — matching the terminal window on /details. */
 .card-window{
     display: flex;
     flex-direction: column;
     width: 800px;
     max-width: 100%;
     overflow: hidden;
-    background: linear-gradient(to right, rgba(40, 44, 52, .72), rgba(65, 67, 72, .6));
+    background: linear-gradient(to right, rgba(var(--panel1-rgb), .72), rgba(var(--panel2-rgb), .6));
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, .12);
+    border: 1px solid rgba(var(--fg-rgb), .12);
     border-radius: 12px;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, .5);
 }
@@ -86,7 +86,7 @@
 }
 
 /* IDENTITY IN THE TITLE BAR */
-/* Name and role live in the window chrome, keeping the One Dark accents. */
+/* Name and role live in the window chrome, now on the Poimandres accents. */
 .win-identity{
     display: flex;
     align-items: center;
@@ -96,16 +96,16 @@
 }
 
 .win-name{
-    color: #98C379;
+    color: var(--accent);
     font-weight: 600;
 }
 
 .win-sep{
-    color: rgba(255, 255, 255, .3);
+    color: rgba(var(--fg-rgb), .3);
 }
 
 .win-role{
-    color: #E5C07B;
+    color: var(--accent3);
 }
 
 .descripcion{
@@ -117,14 +117,14 @@
 .image, .descripcion{
     padding: 30px;
     text-align: left;
-    color: #FFFFFF;
+    color: var(--fg-strong);
 }
 
 .descripcion p{
     padding-bottom: 20px;
     font-weight: 100;
     font-size: 14px;
-    color: #ABB2BF;
+    color: var(--muted);
     white-space: pre-line;
     text-align: justify-all;
 }
@@ -139,31 +139,31 @@
     margin-top: 20px;
     padding: 12px 20px;
     border-radius: 8px;
-    background: rgba(255, 255, 255, .05);
-    border: 1px solid rgba(255, 255, 255, .15);
+    background: rgba(var(--fg-rgb), .05);
+    border: 1px solid rgba(var(--fg-rgb), .15);
     font-family: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
     font-size: 14px;
-    color: #FFFFFF;
+    color: var(--fg-strong);
     text-decoration: none;
     transition: background .3s, border-color .3s, transform .3s, box-shadow .3s;
 }
 
 .launch-btn:hover{
-    background: rgba(255, 255, 255, .14);
-    border-color: rgba(255, 255, 255, .35);
+    background: rgba(var(--fg-rgb), .14);
+    border-color: rgba(var(--fg-rgb), .35);
     transform: translateY(-2px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, .25);
 }
 
 .launch-btn .chevron{
-    color: #32d74b;
+    color: var(--accent);
     font-weight: 700;
 }
 
 .launch-btn .caret{
     width: 1ch;
     height: 1.15em;
-    background: #FFFFFF;
+    background: var(--fg-strong);
     animation: launch-blink 1.06s steps(1) infinite;
 }
 

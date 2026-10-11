@@ -1,21 +1,13 @@
 /* src/styles/background.css
    Animated liquid-blob backdrop shared by the card (/) and the terminal (/details).
-   Ported from firasel/Terminal-Portfolio (MIT).
+   Ported from firasel/Terminal-Portfolio (MIT), now driven by the Poimandres
+   accent hues (cyan/blue/purple) from palette.css instead of fixed colors.
 
    Anything layered on top of this must avoid an opaque background: a block's
    background paints above negative-z-index children, which would bury the blobs. */
 
-:root {
-    --bg-body: #050508;
-    --blob-purple: #2e1a47;
-    --blob-gray: #1c1c24;
-    --blob-blue: #1a2340;
-    --blob-blur: 5rem;
-    --blob-opacity: 0.6;
-}
-
 body {
-    background-color: var(--bg-body);
+    background-color: var(--bg);
     overflow-x: hidden;
 }
 
@@ -23,15 +15,15 @@ body {
     position: fixed;
     inset: 0;
     z-index: -10;
-    background: #000;
+    background: var(--bg);
     overflow: hidden;
 }
 
 .liquid-bg span {
     position: absolute;
     border-radius: 9999px;
-    filter: blur(var(--blob-blur));
-    opacity: var(--blob-opacity);
+    filter: blur(5rem);
+    opacity: 0.35;
     animation: blob-float 20s ease-in-out infinite;
 }
 
@@ -40,7 +32,7 @@ body {
     left: -10%;
     width: 50vw;
     height: 50vw;
-    background: var(--blob-purple);
+    background: var(--accent);
 }
 
 .liquid-bg .blob-2 {
@@ -48,7 +40,7 @@ body {
     right: -10%;
     width: 55vw;
     height: 55vw;
-    background: var(--blob-gray);
+    background: var(--accent2);
 }
 
 .liquid-bg .blob-3 {
@@ -56,7 +48,7 @@ body {
     left: 40%;
     width: 30vw;
     height: 30vw;
-    background: var(--blob-blue);
+    background: var(--accent4);
 }
 
 @keyframes blob-float {
