@@ -4,16 +4,17 @@
 // before the dark/light toggle shared by both pages.
 import '../styles/window.css';
 import ThemeToggle from './ThemeToggle.astro';
+import { SOCIAL_LINKS } from '../data/terminal-data';
 
 const { title, icon = "📁" } = Astro.props;
 ---
 
 <header class="win-header">
     <div class="win-left">
-        <div class="window-controls" aria-hidden="true">
-            <i class="red"></i>
-            <i class="yellow"></i>
-            <i class="green"></i>
+        <div class="window-controls">
+            <a class="red" href={SOCIAL_LINKS.blog} aria-label="Close — back to the blog" title="Back to the blog"></a>
+            <i class="yellow" aria-hidden="true"></i>
+            <i class="green" aria-hidden="true"></i>
         </div>
         <div class="win-title">
             <span aria-hidden="true">{icon}</span>

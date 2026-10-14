@@ -34,7 +34,9 @@
     margin-right: 1rem;
 }
 
-.window-controls i {
+.window-controls i,
+.window-controls a {
+    display: inline-block;
     width: 0.75rem;
     height: 0.75rem;
     border-radius: 9999px;
@@ -42,9 +44,18 @@
     transition: filter 0.2s, box-shadow 0.2s;
 }
 
-.window-controls i:hover {
+.window-controls i:hover,
+.window-controls a:hover {
     filter: brightness(1.25);
     box-shadow: 0 0 8px currentColor;
+}
+
+/* The red dot is the one live control — a "close" that actually closes this
+   window back out to the blog it's embedded in. Needs its own focus ring
+   since it's the only real link among three decorative dots. */
+.window-controls a:focus-visible {
+    outline: 2px solid var(--accent2);
+    outline-offset: 2px;
 }
 
 /* Authentic macOS traffic-light colors — fixed regardless of theme, since
